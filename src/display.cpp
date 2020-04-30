@@ -6,4 +6,4 @@
  * Implements the interface for the display.
  */
 
-#include "../include/display.h"
+#include "display.h"
