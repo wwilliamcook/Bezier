@@ -12,11 +12,15 @@ add_subdirectory(deps/GLFW)
 
 
 ###############################################################################
-# CURVE LIBRARY
+# LIBRARIES
 ###############################################################################
+
+add_library(Bezier src/bezier.c)
+target_include_directories(Bezier PRIVATE include)
 
 add_library(Curve src/curve.cpp)
 target_include_directories(Curve PRIVATE include)
+target_link_libraries(Curve Bezier)
 
 
 ###############################################################################
