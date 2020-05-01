@@ -5,8 +5,6 @@
  */
 
 #include "curve.h"
-#include <stdio.h>
-#include <iostream>
 
 #define BEZ_ONE_THIRD 0.33333333333333333333333333333
 #define BEZ_TWO_THIRDS 0.66666666666666666666666666666
@@ -48,27 +46,13 @@ Curve::Curve(const std::vector<std::array<BEZ_DTYPE, BEZ_DIMS>>& anchor_points) 
         c.push_back(0.);
     }
 
-    for (const std::array<BEZ_DTYPE, BEZ_DIMS>& p : points) {
-        printf("(%6.1f, %6.1f)\n", p[0], p[1]);
-    }
-
     for (i = 1; i < points.size(); ) {
         points.insert(points.begin() + i, v);
         points.insert(points.begin() + i, v);
         i += 3;
     }
 
-    printf("\n");
-    for (const std::array<BEZ_DTYPE, BEZ_DIMS>& p : points) {
-        printf("(%6.1f, %6.1f)\n", p[0], p[1]);
-    }
-
     updateControlPoints();
-
-    printf("\n");
-    for (const std::array<BEZ_DTYPE, BEZ_DIMS>& p : points) {
-        printf("(%6.1f, %6.1f)\n", p[0], p[1]);
-    }
 }
 
 

@@ -79,15 +79,9 @@ int main() {
     anchor_points.push_back(bezVect{.6, .7});
     anchor_points.push_back(bezVect{.8, .9});
 
-    Curve c0();
+    Curve c0;
     Curve c1(anchor_points);
     bezVect v;
-
-    printf("\nAnchor points according to getPositionAt(...):\n");
-    for (float t = 0; t < 5.; t++) {
-        v = c1.getPositionAt(t / (float)(c1.bezier_count));
-        printf("(%6.1f, %6.1f)\n", v[0], v[1]);
-    }
 
     int mouse_state, last_mouse_state = GLFW_PRESS + 1;
     double cursor_x, cursor_y;
@@ -162,6 +156,7 @@ int main() {
     return 0;
 }
 
+// Include alternate entry point for linking with the windows subsystem
 int WinMain() {
     return main();
 }

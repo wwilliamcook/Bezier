@@ -1,7 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <stdio.h>
 #include <math.h>
 
 #define WINDOW_WIDTH 720
@@ -66,13 +65,9 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     if (glewInit() != GLEW_OK)
-        std::cout << "Error!" << std::endl;
+        std::cout << "GLEW Error!" << std::endl;
 
     std::cout << glGetString(GL_VERSION) << std::endl;
-
-    for (int i = 0; i < 4; i++) {
-        printf("(%5.2f, %5.2f)\n", control_points[i][0], control_points[i][1]);
-    }
 
     int mouse_state, last_mouse_state = GLFW_PRESS + 1;
     double cursor_x, cursor_y;
@@ -138,6 +133,7 @@ int main(void)
     return 0;
 }
 
+// Include alternate entry point for linking with the windows subsystem
 int WinMain() {
     return main();
 }
