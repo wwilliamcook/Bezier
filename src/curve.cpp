@@ -6,6 +6,10 @@
 
 #include "curve.h"
 
+#include <stdlib.h>
+
+#include "bezier.h"
+
 #define BEZ_ONE_THIRD 0.33333333333333333333333333333
 #define BEZ_TWO_THIRDS 0.66666666666666666666666666666
 
@@ -19,7 +23,7 @@
  *
  * Constructs an empty spline.
  */
-Curve::Curve(void) :
+Curve2D::Curve2D(void) :
     anchor_count(0), bezier_count(0) {
     // Nothing to do
 }
@@ -32,14 +36,14 @@ Curve::Curve(void) :
  * Args:
  *   anchor_points: ordered anchor points from which to construct spline
  */
-Curve::Curve(const std::vector<std::array<BEZ_DTYPE, BEZ_DIMS>>& anchor_points) :
+Curve2D::Curve2D(const std::vector<bezVect2D>& anchor_points) :
     points(anchor_points) {
     anchor_count = points.size();
     bezier_count = points.size() - 1;
 
     std::size_t i;
-    std::vector<std::array<BEZ_DTYPE, BEZ_DIMS>>::iterator iter;
-    std::array<BEZ_DTYPE, BEZ_DIMS> v{ 0, 0 };
+    std::vector<bezVect2D>::iterator iter;
+    bezVect2D v{ 0, 0 };
 
     for (i = 0; i < anchor_count; i++) {
         B_points.push_back(v);
@@ -71,7 +75,7 @@ Curve::Curve(const std::vector<std::array<BEZ_DTYPE, BEZ_DIMS>>& anchor_points) 
  * Throws:
  *   std::out_of_range if 0 <= i <= 1 is not satisfied
  */
-std::array<BEZ_DTYPE, BEZ_DIMS> Curve::getPositionAt(BEZ_DTYPE t) const {
+bezVect2D Curve2D::getPositionAt(BEZ_DTYPE t) const {
     t *= (BEZ_DTYPE)(bezier_count);
     std::size_t bez_i = (std::size_t)(t);  // index of Bezier curve
     std::size_t k;
@@ -82,19 +86,14 @@ std::array<BEZ_DTYPE, BEZ_DIMS> Curve::getPositionAt(BEZ_DTYPE t) const {
 
     bez_i *= 3;  // index of corresponding P_0 in `points`
     t = fmod(t, 1.);
-    std::array<BEZ_DTYPE, BEZ_DIMS> out;
-    BEZ_DTYPE t_squared = t * t;
-    BEZ_DTYPE t_cubed = t_squared * t;
-    BEZ_DTYPE omt = 1. - t;  // 1 - t
-    BEZ_DTYPE omt_squared = omt * omt;
-    BEZ_DTYPE omt_cubed = omt_squared * omt;
-    BEZ_DTYPE coef1 = 3 * t * omt_squared;
-    BEZ_DTYPE coef2 = 3 * t_squared * omt;
+    bezVect2D out;
 
-    for (k = 0; k < BEZ_DIMS; k++) {
-        out[k] = points[bez_i][k] * omt_cubed + points[bez_i + 1][k] * coef1 +
-            points[bez_i + 2][k] * coef2 + points[bez_i + 3][k] * t_cubed;
-    }
+    bezEvaluate2D(points[bez_i][0], points[bez_i][1],
+                  points[bez_i + 1][0], points[bez_i + 1][1],
+                  points[bez_i + 2][0], points[bez_i + 2][1],
+                  points[bez_i + 3][0], points[bez_i + 3][1],
+                  t,
+                  &out[0], &out[1]);
 
     return out;
 }
@@ -104,7 +103,7 @@ std::array<BEZ_DTYPE, BEZ_DIMS> Curve::getPositionAt(BEZ_DTYPE t) const {
  *
  * Returns the number of anchor points.
  */
-std::size_t Curve::anchorCount(void) const {
+std::size_t Curve2D::anchorCount(void) const {
     // Not implemented
     return anchor_count;
 }
@@ -120,7 +119,7 @@ std::size_t Curve::anchorCount(void) const {
  * Throws:
  *   std::out_of_range if 0 <= i < anchorCount() is not satisfied
  */
-const std::array<BEZ_DTYPE, BEZ_DIMS>& Curve::getAnchor(std::size_t i) const {
+const bezVect2D& Curve2D::getAnchor(std::size_t i) const {
     return points[i * 3];
 }
 
@@ -136,7 +135,7 @@ const std::array<BEZ_DTYPE, BEZ_DIMS>& Curve::getAnchor(std::size_t i) const {
  * Throws:
  *   std::out_of_range if 0 <= t0,t1 <= 1 is not satified
  */
-BEZ_DTYPE Curve::getLength(BEZ_DTYPE t0, BEZ_DTYPE t1) const {
+BEZ_DTYPE Curve2D::getLength(BEZ_DTYPE t0, BEZ_DTYPE t1) const {
     // Not implemented
     return 0;
 }
@@ -146,7 +145,7 @@ BEZ_DTYPE Curve::getLength(BEZ_DTYPE t0, BEZ_DTYPE t1) const {
  *
  * Returns the total length of the spline.
  */
-BEZ_DTYPE Curve::getLength(void) const {
+BEZ_DTYPE Curve2D::getLength(void) const {
     // Not implemented
     return 0;
 }
@@ -166,7 +165,7 @@ BEZ_DTYPE Curve::getLength(void) const {
  * Throws:
  *   std::out_of_range if 0 <= t <= 1 is not satisfied
  */
-void Curve::split(BEZ_DTYPE t, Curve& c1, Curve& c2) const {
+void Curve2D::split(BEZ_DTYPE t, Curve2D& c1, Curve2D& c2) const {
     // Not implemented
 }
 
@@ -176,7 +175,7 @@ void Curve::split(BEZ_DTYPE t, Curve& c1, Curve& c2) const {
 //*************************************************************************
 
 /*
- * function: addPoint
+ * function: addAnchor
  *
  * Adds an anchor point at the given index.
  *
@@ -187,12 +186,12 @@ void Curve::split(BEZ_DTYPE t, Curve& c1, Curve& c2) const {
  * Throws:
  *   std::out_of_range if 0 <= i <= anchorCount() is not satisfied
  */
-void Curve::addPoint(std::array<BEZ_DTYPE, BEZ_DIMS> position, std::size_t i) {
+void Curve2D::addAnchor(bezVect2D position, std::size_t i) {
     // Not implemented
 }
 
 /*
- * function: removePoint
+ * function: removeAnchor
  *
  * Removes the anchor point at the given index from the spline.
  *
@@ -202,7 +201,7 @@ void Curve::addPoint(std::array<BEZ_DTYPE, BEZ_DIMS> position, std::size_t i) {
  * Throws:
  *   std::out_of_range if 0 <= i < anchorCount() is not satisfied
  */
-void Curve::removePoint(std::size_t i) {
+void Curve2D::removeAnchor(std::size_t i) {
     // Not implemented
 }
 
@@ -218,7 +217,7 @@ void Curve::removePoint(std::size_t i) {
  * Throws:
  *   std::out_of_range if 0 <= i < anchorCount() is not satisfied
  */
-void Curve::setAnchor(std::array<BEZ_DTYPE, BEZ_DIMS> position, std::size_t i) {
+void Curve2D::setAnchor(bezVect2D position, std::size_t i) {
     points[i * 3] = position;
 }
 
@@ -234,7 +233,7 @@ void Curve::setAnchor(std::array<BEZ_DTYPE, BEZ_DIMS> position, std::size_t i) {
  * Throws:
  *   std::out_of_range if 0 <= i < anchorCount() is not satisfied
  */
-void Curve::moveAnchor(std::array<BEZ_DTYPE, BEZ_DIMS> offset, std::size_t i) {
+void Curve2D::moveAnchor(bezVect2D offset, std::size_t i) {
     // Not implemented
 }
 
@@ -243,7 +242,7 @@ void Curve::moveAnchor(std::array<BEZ_DTYPE, BEZ_DIMS> offset, std::size_t i) {
  *
  * Removes all anchor points from the spline.
  */
-void Curve::clear(void) {
+void Curve2D::clear(void) {
     // Not implemented
 }
 
@@ -257,7 +256,7 @@ void Curve::clear(void) {
  *
  * Sets the positions of the control points to ensure C2 continuity.
  */
-void Curve::updateControlPoints(void) {
+void Curve2D::updateControlPoints(void) {
     std::size_t i;  // i stores index of anchor point
     std::size_t j;  // j stores index of anchor point in `points`
     std::size_t k;
@@ -267,53 +266,59 @@ void Curve::updateControlPoints(void) {
         return;
 
     if (anchor_count == 2) {
-        for (k = 0; k < BEZ_DIMS; k++) {
-            points[1][k] = points[0][k];
-            points[2][k] = points[3][k];
-        }
+        points[1][0] = points[0][0];
+        points[1][1] = points[0][1];
+
+        points[2][0] = points[3][0];
+        points[2][1] = points[3][1];
+        
         return;
     }
 
     // Calculate positions of B_points
-    for (k = 0; k < BEZ_DIMS; k++) {
-        B_points[0][k] = points[0][k];
-        B_points[anchor_count - 1][k] = points[points.size() - 1][k];
-    }
+    B_points[0][0] = points[0][0];
+    B_points[0][1] = points[0][1];
+
+    B_points[anchor_count - 1][0] = points[points.size() - 1][0];
+    B_points[anchor_count - 1][1] = points[points.size() - 1][1];
+    
     c[1] = 0.25;
-    for (k = 0; k < BEZ_DIMS; k++) {
-        B_points[1][k] = c[1] * (6. * points[3][k] - points[0][k]);
-    }
+
+    B_points[1][0] = c[1] * (6. * points[3][0] - points[0][0]);
+    B_points[1][1] = c[1] * (6. * points[3][1] - points[0][1]);
 
     for (i = 2, j = 6; i < anchor_count - 2; i++, j += 3) {
         c[i] = 1. / (4. - c[i - 1]);
-        for (k = 0; k < BEZ_DIMS; k++) {
-            B_points[i][k] = c[i] * (6. * points[j][k] - B_points[i - 1][k]);
-        }
+
+        B_points[i][0] = c[i] * (6. * points[j][0] - B_points[i - 1][0]);
+        B_points[i][1] = c[i] * (6. * points[j][1] - B_points[i - 1][1]);
     }
 
     i = anchor_count - 2;
     j = points.size() - 1;
     c[i] = 1. / (4. - c[i - 1]);
-    for (k = 0; k < BEZ_DIMS; k++) {
-        B_points[i][k] = c[i] * (6. * points[j - 3][k] - points[j][k] -B_points[i - 1][k]);
-    }
+
+    B_points[i][0] = c[i] * (6. * points[j - 3][0] - points[j][0] - B_points[i - 1][0]);
+    B_points[i][1] = c[i] * (6. * points[j - 3][1] - points[j][1] - B_points[i - 1][1]);
 
     for (i = anchor_count - 3; i > 0; i--) {
-        for (k = 0; k < BEZ_DIMS; k++) {
-            B_points[i][k] -= c[i] * B_points[i + 1][k];
-        }
+        B_points[i][0] -= c[i] * B_points[i + 1][0];
+        B_points[i][1] -= c[i] * B_points[i + 1][1];
     }
 
     // Calculate positions of control points
-    for (k = 0; k < BEZ_DIMS; k++) {
-        i = 1;
-        j = 0;
-        while (i < points.size()) {
-            points[i][k] = BEZ_TWO_THIRDS * B_points[j][k] + BEZ_ONE_THIRD * B_points[j + 1][k];
-            i++;
-            points[i][k] = BEZ_ONE_THIRD * B_points[j][k] + BEZ_TWO_THIRDS * B_points[j + 1][k];
-            i += 2;
-            j++;
-        }
+    i = 1;
+    j = 0;
+    while (i < points.size()) {
+        points[i][0] = BEZ_TWO_THIRDS * B_points[j][0] + BEZ_ONE_THIRD * B_points[j + 1][0];
+        points[i][1] = BEZ_TWO_THIRDS * B_points[j][1] + BEZ_ONE_THIRD * B_points[j + 1][1];
+
+        i++;
+
+        points[i][0] = BEZ_ONE_THIRD * B_points[j][0] + BEZ_TWO_THIRDS * B_points[j + 1][0];
+        points[i][1] = BEZ_ONE_THIRD * B_points[j][1] + BEZ_TWO_THIRDS * B_points[j + 1][1];
+
+        i += 2;
+        j++;
     }
 }
