@@ -15,10 +15,10 @@ add_subdirectory(deps/GLFW)
 # LIBRARIES
 ###############################################################################
 
-add_library(Bezier src/bezier.c)
+add_library(Bezier src/bezier.cpp include/bezier.h)
 target_include_directories(Bezier PRIVATE include)
 
-add_library(Curve src/curve.cpp)
+add_library(Curve src/curve.cpp include/curve.h)
 target_include_directories(Curve PRIVATE include)
 target_link_libraries(Curve Bezier)
 
@@ -26,6 +26,10 @@ target_link_libraries(Curve Bezier)
 ###############################################################################
 # TESTS
 ###############################################################################
+
+add_executable(test-bezier_library test/bezier_test.cpp)
+target_include_directories(test-bezier_library PRIVATE include)
+target_link_libraries(test-bezier_library Bezier)
 
 
 ###############################################################################
@@ -38,6 +42,7 @@ target_include_directories(Example-SingleBezierVisualization PRIVATE
                            deps/GLEW/include
                            deps/GLFW/include)
 target_link_libraries(Example-SingleBezierVisualization
+                      Bezier
                       glew_s
                       glfw)
 
