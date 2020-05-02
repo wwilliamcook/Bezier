@@ -3,6 +3,9 @@
 #include <iostream>
 #include <math.h>
 
+#include "bezier.h"
+
+
 #define WINDOW_WIDTH 720
 #define WINDOW_HEIGHT 720
 #define CONTROL_RADIUS 0.031
@@ -16,34 +19,15 @@ float control_points[4][2] = {
     {0.814, 0.67}
 };
 
-void drawCircle(float x, float y, float radius, float theta_step_size) {
-    glBegin(GL_POLYGON);
-    for (float theta = 0; theta < MATH_TAU; theta += theta_step_size) {
-        glVertex2f(x + radius*cosf(theta), y + radius*sinf(theta));
-    }
-    glEnd();
-}
+void drawCircle(float x, float y, float radius, float theta_step_size);
 
 void drawBezier(float x0, float y0,
                 float x1, float y1,
                 float x2, float y2,
-                float x3, float y3) {
-    float curr_x, curr_y, last_x, last_y, t;
-    glBegin(GL_LINES);
-    last_x = x0;
-    last_y = y0;
-    for (t = STEP_SIZE; t < 1; t += STEP_SIZE) {
-        curr_x = x0 * (1 - t) * (1 - t) * (1 - t) + 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + x3 * t * t * t;
-        curr_y = y0 * (1 - t) * (1 - t) * (1 - t) + 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + y3 * t * t * t;
-        glVertex2f(last_x, last_y);
-        glVertex2f(curr_x, curr_y);
-        last_x = curr_x;
-        last_y = curr_y;
-    }
-    glEnd();
-}
+                float x3, float y3);
 
-int main(void)
+
+int main(int argc, char* argv[])
 {
     GLFWwindow* window;
 
@@ -133,7 +117,29 @@ int main(void)
     return 0;
 }
 
-// Include alternate entry point for linking with the windows subsystem
-int WinMain() {
-    return main();
+
+void drawCircle(float x, float y, float radius, float theta_step_size) {
+    glBegin(GL_POLYGON);
+    for (float theta = 0; theta < MATH_TAU; theta += theta_step_size) {
+        glVertex2f(x + radius*cosf(theta), y + radius*sinf(theta));
+    }
+    glEnd();
+}
+
+void drawBezier(float x0, float y0,
+                float x1, float y1,
+                float x2, float y2,
+                float x3, float y3) {
+    float curr_x, curr_y, last_x, last_y, t;
+    glBegin(GL_LINES);
+    last_x = x0;
+    last_y = y0;
+    for (t = STEP_SIZE; t < 1; t += STEP_SIZE) {
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t, &curr_x, &curr_y);
+        glVertex2f(last_x, last_y);
+        glVertex2f(curr_x, curr_y);
+        last_x = curr_x;
+        last_y = curr_y;
+    }
+    glEnd();
 }
