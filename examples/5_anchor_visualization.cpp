@@ -13,8 +13,6 @@
 #define MATH_TAU 6.283185307179586
 #define STEP_SIZE .01
 
-typedef std::array<BEZ_DTYPE, BEZ_DIMS> bezVect;
-
 void drawCircle(float x, float y, float radius, float theta_step_size) {
     glBegin(GL_POLYGON);
     for (float theta = 0; theta < MATH_TAU; theta += theta_step_size) {
@@ -23,11 +21,11 @@ void drawCircle(float x, float y, float radius, float theta_step_size) {
     glEnd();
 }
 
-void drawCurve(const Curve& c) {
+void drawCurve(const Curve2D& c) {
     if (c.anchorCount() == 0) {
         return;
     }
-    bezVect curr_pos;
+    bezVect2D curr_pos;
     if (c.anchorCount() == 1) {
         curr_pos = c.getPositionAt(0);
         drawCircle(curr_pos[0], curr_pos[1], .006, STEP_SIZE);
@@ -35,7 +33,7 @@ void drawCurve(const Curve& c) {
 
     float t;
     glBegin(GL_LINES);
-    bezVect last_pos;
+    bezVect2D last_pos;
     last_pos = c.getPositionAt(0);
     for (t = STEP_SIZE; t <= 1; t += STEP_SIZE) {
         curr_pos = c.getPositionAt(t);
@@ -71,17 +69,17 @@ int main() {
     std::cout << glGetString(GL_VERSION) << std::endl;
 
 
-    std::vector<bezVect> anchor_points;
+    std::vector<bezVect2D> anchor_points;
 
-    anchor_points.push_back(bezVect{.0, .1});
-    anchor_points.push_back(bezVect{.2, .3});
-    anchor_points.push_back(bezVect{.4, .5});
-    anchor_points.push_back(bezVect{.6, .7});
-    anchor_points.push_back(bezVect{.8, .9});
+    anchor_points.push_back(bezVect2D{.0, .1});
+    anchor_points.push_back(bezVect2D{.2, .3});
+    anchor_points.push_back(bezVect2D{.4, .5});
+    anchor_points.push_back(bezVect2D{.6, .7});
+    anchor_points.push_back(bezVect2D{.8, .9});
 
-    Curve c0;
-    Curve c1(anchor_points);
-    bezVect v;
+    Curve2D c0;
+    Curve2D c1(anchor_points);
+    bezVect2D v;
 
     int mouse_state, last_mouse_state = GLFW_PRESS + 1;
     double cursor_x, cursor_y;
@@ -127,7 +125,7 @@ int main() {
             drawCircle(v[0], v[1], CONTROL_RADIUS, MATH_TAU * .05);
         }
 
-        bezVect v2 = c1.getAnchor(0);
+        bezVect2D v2 = c1.getAnchor(0);
         glColor3f(.6f, .1f, .2f);
         drawCircle(v2[0], v2[1], CONTROL_RADIUS * .5, MATH_TAU * .05);
         for (int i = 1; i < c1.anchorCount(); i++) {
