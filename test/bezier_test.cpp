@@ -400,6 +400,8 @@ int main(int argc, char* argv[]) {
     num_tests = num_fails = -1;
 
 
+    printf("\n\nThis concludes the unit tests for bezier.h/cpp\n");
+
     return 0;
 }
 
