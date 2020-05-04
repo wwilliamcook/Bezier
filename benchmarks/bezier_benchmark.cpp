@@ -27,7 +27,8 @@
 int main(int argc, char* argv[]) {
     FILE* log_file;
     BOOL log = TRUE;
-    double ops_per_sec, micros_per_op;
+    double duration;
+    int num_executions;
     BEZ_DTYPE x, y, z,
         x0, y0, z0,
         x1, y1, z1,
@@ -58,7 +59,7 @@ int main(int argc, char* argv[]) {
     printAndLog(log_file, log, "\nTiming function bezEvaluate2D:\n");
     //*************************************************************************
 
-    timeThisCode(ops_per_sec, micros_per_op, MIN_DURATION, MAX_DURATION,
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
         bezEvaluate2D(8., -8.5,
             2.5, 3.17,
             -3.92, -8.5,
@@ -67,15 +68,17 @@ int main(int argc, char* argv[]) {
             &x, &y);
     );
 
-    printAndLog(log_file, log, "million operations per second: %f\n", ops_per_sec / 1e6);
-    printAndLog(log_file, log, "microseconds per operation:    %f\n", micros_per_op);
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
 
 
     //*************************************************************************
     printAndLog(log_file, log, "\nTiming function bezEvaluate3D:\n");
     //*************************************************************************
 
-    timeThisCode(ops_per_sec, micros_per_op, MIN_DURATION, MAX_DURATION,
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
         bezEvaluate3D(-0.085, -3.165, -5.487,
             -2.688, 0.121, -9.054,
             3.462, -4.075, 2.702,
@@ -84,15 +87,17 @@ int main(int argc, char* argv[]) {
             &x, &y, &z);
     );
 
-    printAndLog(log_file, log, "million operations per second: %f\n", ops_per_sec / 1e6);
-    printAndLog(log_file, log, "microseconds per operation:    %f\n", micros_per_op);
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
 
 
     //*************************************************************************
     printAndLog(log_file, log, "\nTiming function bezSplitCurve2D:\n");
     //*************************************************************************
 
-    timeThisCode(ops_per_sec, micros_per_op, MIN_DURATION, MAX_DURATION,
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
         bezSplitCurve2D(8., -8.5,
             2.5, 3.17,
             -3.92, -8.5,
@@ -108,15 +113,17 @@ int main(int argc, char* argv[]) {
             &d3, &e3);
     );
 
-    printAndLog(log_file, log, "million operations per second: %f\n", ops_per_sec / 1e6);
-    printAndLog(log_file, log, "microseconds per operation:    %f\n", micros_per_op);
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
 
 
     //*************************************************************************
     printAndLog(log_file, log, "\nTiming function bezSplitCurve3D:\n");
     //*************************************************************************
 
-    timeThisCode(ops_per_sec, micros_per_op, MIN_DURATION, MAX_DURATION,
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
         bezSplitCurve3D(-0.085, -3.165, -5.487,
             -2.688, 0.121, -9.054,
             3.462, -4.075, 2.702,
@@ -132,8 +139,10 @@ int main(int argc, char* argv[]) {
             &d3, &e3, &f3);
     );
 
-    printAndLog(log_file, log, "million operations per second: %f\n", ops_per_sec / 1e6);
-    printAndLog(log_file, log, "microseconds per operation:    %f\n", micros_per_op);
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
 
 
     printAndLog(log_file, log, "\n\nThis concludes the benchmarks for bezier.h\n");

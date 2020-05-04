@@ -23,25 +23,26 @@ void printAndLog(FILE* log_file, BOOL log, char* format, ...);
 /*
  * function-like macro: timeThisCode
  *
- * Measures the number of microseconds per execution of code_to_time.
+ * Executes code_to_time many times and returns the total duration and number
+ * of times it was executed.
  *
  * Args:
- *   ops_per_sec: name of variable to store number of executions per second in
- *   microseconds: name of variable to store microseconds per execution in
+ *   min_duration: minimum seconds to spend benchmarking the code (double)
+ *   max_duration: maximum seconds to spend benchmarking the code (double)
+ *   duration: name of variable to store the total duration of execution (double)
+ *   num_times: name of variable to store the number of executions (int)
  *   code_to_time: the code whose execution time to measure
- *   min_duration: minimum seconds to spend benchmarking the code
- *   max_duration: maximum seconds to spend benchmarking the code
  * 
  * NOTE: this function is implemented as a macro to avoid the mess of passing a
  * void (void* arg_data) prototyped function pointer in, which would incur
  * redundant function definitions and obscene argument structs among other
  * nasty things...
  */
-#define timeThisCode(ops_per_sec, microseconds, min_duration, max_duration,\
-                    code_to_time) {\
+#define timeThisCode(min_duration, max_duration, duration, num_times,\
+                     code_to_time) {\
     struct timespec start, end;\
-    double duration, multiplier;\
-    int num_times, i;\
+    double multiplier;\
+    int i;\
     num_times = 1;\
     while (TRUE) {\
         timespec_get(&start, TIME_UTC);\
@@ -50,13 +51,11 @@ void printAndLog(FILE* log_file, BOOL log, char* format, ...);
         }\
         timespec_get(&end, TIME_UTC);\
         duration = timespec2sec(start, end);\
-        multiplier = (max_duration) / (double)duration;\
+        multiplier = (max_duration) / duration;\
         if (multiplier > 1000.) multiplier = 1000.;\
         if (duration < (min_duration)) num_times *= multiplier;\
         else break;\
     }\
-    ops_per_sec = (double)(num_times) / duration;\
-    microseconds = duration * 1e6 / (double)(num_times);\
 }
 
 
