@@ -55,3 +55,12 @@ target_link_libraries(Example-FiveAnchorVisualization
                       Curve
                       glew_s
                       glfw)
+
+
+###############################################################################
+# BENCHMARKS
+###############################################################################
+
+add_executable(benchmark-bezier_library benchmarks/bezier_benchmark.cpp)
+target_include_directories(benchmark-bezier_library PRIVATE include)
+target_link_libraries(benchmark-bezier_library Bezier)
