@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printf("\nTesting function bezEvaluate2D:\n");
+    printf("\nTesting function bezEvaluate2D (CUBIC):\n");
     //*************************************************************************
     num_tests = 5;
     num_fails = 0;
@@ -149,7 +149,152 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printf("\nTesting function bezEvaluate3D:\n");
+    printf("\nTesting function bezEvaluate2D (QUADRATIC):\n");
+    //*************************************************************************
+    num_tests = 5;
+    num_fails = 0;
+
+    // test 1
+    bezEvaluate2D(5.1, 7.71,
+                  -6.86, 9.54,
+                  -4.66, 2.78,
+                  0.414,
+                  &x, &y);
+
+    if (!(is_close(x, -2.37591264) && is_close(y, 7.75294836))) {
+        num_fails++;
+        printf("failed test 1\n");
+    }
+
+    // test 2
+    bezEvaluate2D(-0.35, -9.5,
+                  -8.57, -0.2,
+                  6.44, 3.05,
+                  0.754,
+                  &x, &y);
+
+    if (!(is_close(x, 0.46086668) && is_close(y, 1.0848782))) {
+        num_fails++;
+        printf("failed test 2\n");
+    }
+
+    // test 3
+    bezEvaluate2D(-9.53, 4.27,
+                  -4.94, -4.74,
+                  -7.7, 0.72,
+                  0.031,
+                  &x, &y);
+
+    if (!(is_close(x, -9.25248335) && is_close(y, 3.72528567))) {
+        num_fails++;
+        printf("failed test 3\n");
+    }
+
+    // test 4
+    bezEvaluate2D(7.43, -3.23,
+                  -9.3, -5.33,
+                  -6.03, 5.09,
+                  0.67,
+                  &x, &y);
+
+    if (!(is_close(x, -6.0102) && is_close(y, -0.423772))) {
+        num_fails++;
+        printf("failed test 4\n");
+    }
+
+    // test 5
+    bezEvaluate2D(9.04, -4.85,
+                  0.28, -7.67,
+                  9.67, -5.61,
+                  0.88,
+                  &x, &y);
+
+    if (!(is_close(x, 7.67776) && is_close(y, -6.034128))) {
+        num_fails++;
+        printf("failed test 5\n");
+    }
+
+    if (num_fails == 0) {
+        printf("all %d tests passed\n", num_tests);
+    }
+    else {
+        printf("failed %d/%d tests\n", num_fails, num_tests);
+    }
+    num_tests = num_fails = -1;
+
+
+    //*************************************************************************
+    printf("\nTesting function bezEvaluate2D (LINEAR):\n");
+    //*************************************************************************
+    num_tests = 5;
+    num_fails = 0;
+
+    // test 1
+    bezEvaluate2D(9.25, -6.77,
+                  6.76, -4.55,
+                  0.811,
+                  &x, &y);
+
+    if (!(is_close(x, 7.23061) && is_close(y, -4.96958))) {
+        num_fails++;
+        printf("failed test 1\n");
+    }
+
+    // test 2
+    bezEvaluate2D(7.88, -8.43,
+                  -3.65, -5.7,
+                  0.712,
+                  &x, &y);
+
+    if (!(is_close(x, -0.32936) && is_close(y, -6.48624))) {
+        num_fails++;
+        printf("failed test 2\n");
+    }
+
+    // test 3
+    bezEvaluate2D(-9.94, 4.22,
+                  7.56, -3.18,
+                  0.13,
+                  &x, &y);
+
+    if (!(is_close(x, -7.665) && is_close(y, 3.258))) {
+        num_fails++;
+        printf("failed test 3\n");
+    }
+
+    // test 4
+    bezEvaluate2D(0.35, 9.93,
+                  -4.06, -1.58,
+                  0.419,
+                  &x, &y);
+
+    if (!(is_close(x, -1.49779) && is_close(y, 5.10731))) {
+        num_fails++;
+        printf("failed test 4\n");
+    }
+
+    // test 5
+    bezEvaluate2D(-9.29, 0.82,
+                  -8.14, -6.9,
+                  0.188,
+                  &x, &y);
+
+    if (!(is_close(x, -9.0738) && is_close(y, -0.63136))) {
+        num_fails++;
+        printf("failed test 5\n");
+    }
+
+    if (num_fails == 0) {
+        printf("all %d tests passed\n", num_tests);
+    }
+    else {
+        printf("failed %d/%d tests\n", num_fails, num_tests);
+    }
+    num_tests = num_fails = -1;
+
+
+    //*************************************************************************
+    printf("\nTesting function bezEvaluate3D (CUBIC):\n");
     //*************************************************************************
     num_tests = 5;
     num_fails = 0;
@@ -215,6 +360,151 @@ int main(int argc, char* argv[]) {
         &x, &y, &z);
 
     if (!(is_close(x, -6.023568) && is_close(y, 1.511082) && is_close(z, 0.174931))) {
+        num_fails++;
+        printf("failed test 5\n");
+    }
+
+    if (num_fails == 0) {
+        printf("all %d tests passed\n", num_tests);
+    }
+    else {
+        printf("failed %d/%d tests\n", num_fails, num_tests);
+    }
+    num_tests = num_fails = -1;
+
+
+    //*************************************************************************
+    printf("\nTesting function bezEvaluate3D (QUADRATIC):\n");
+    //*************************************************************************
+    num_tests = 5;
+    num_fails = 0;
+
+    // test 1
+    bezEvaluate3D(6.8, -5.2, -2.,
+                  9.92, -3.7, 6.2,
+                  -8.6, -1.5, 5.2,
+                  0.455,
+                  &x, &y, &z);
+
+    if (!(is_close(x, 5.159179) && is_close(y, -3.6900825) && is_close(z, 3.55737))) {
+        num_fails++;
+        printf("failed test 1\n");
+    }
+    
+    // test 2
+    bezEvaluate3D(-6.92, -6.05, 8.64,
+                  -1.38, -7.55, -9.52,
+                  -5.5, 8.64, 8.4,
+                  0.696,
+                  &x, &y, &z);
+
+    if (!(is_close(x, -3.88777856) && is_close(y, 0.43131904) && is_close(z, 0.83900928))) {
+        num_fails++;
+        printf("failed test 2\n");
+    }
+
+    // test 3
+    bezEvaluate3D(9.55, 1.18, -6.33,
+                  4.57, -8.32, -7.9,
+                  9.5, 3.01, 1.53,
+                  0.906,
+                  &x, &y, &z);
+
+    if (!(is_close(x, 8.6607246) && is_close(y, 1.06401388) && is_close(z, -0.145644))) {
+        num_fails++;
+        printf("failed test 3\n");
+    }
+
+    // test 4
+    bezEvaluate3D(0.35, 7.13, -6.34,
+                  0.32, 3.52, 5.9,
+                  0.8, 8.8, 3.,
+                  0.634,
+                  &x, &y, &z);
+
+    if (!(is_close(x, 0.51695756) && is_close(y, 6.12590884) && is_close(z, 3.09470616))) {
+        num_fails++;
+        printf("failed test 4\n");
+    }
+
+    // test 5
+    bezEvaluate3D(1.1, 8.13, 7.5,
+                  7.61, 6.82, -8.63,
+                  5.4, -2.06, 7.73,
+                  0.927,
+                  &x, &y, &z);
+
+    if (!(is_close(x, 5.67619112) && is_close(y, -0.80386053) && is_close(z, 5.51457921))) {
+        num_fails++;
+        printf("failed test 5\n");
+    }
+
+    if (num_fails == 0) {
+        printf("all %d tests passed\n", num_tests);
+    }
+    else {
+        printf("failed %d/%d tests\n", num_fails, num_tests);
+    }
+    num_tests = num_fails = -1;
+
+
+    //*************************************************************************
+    printf("\nTesting function bezEvaluate3D (LINEAR):\n");
+    //*************************************************************************
+    num_tests = 5;
+    num_fails = 0;
+
+    // test 1
+    bezEvaluate3D(-6.77, 3.2, 8.3,
+                  -8.43, 7.65, 4.08,
+                  0.88,
+                  &x, &y, &z);
+
+    if (!(is_close(x, -8.2308) && is_close(y, 7.116) && is_close(z, 4.5864))) {
+        num_fails++;
+        printf("failed test 1\n");
+    }
+    
+    // test 2
+    bezEvaluate3D(7.74, 4.94, -7.86,
+                  -6.59, -4.86, 0.98,
+                  0.508,
+                  &x, &y, &z);
+
+    if (!(is_close(x, 0.46036) && is_close(y, -0.0384) && is_close(z, -3.36928))) {
+        num_fails++;
+        printf("failed test 2\n");
+    }
+
+    // test 3
+    bezEvaluate3D(5.51, -6.14, -5.42,
+                  -1.81, 6.1, -5.44,
+                  0.283,
+                  &x, &y, &z);
+
+    if (!(is_close(x, 3.43844) && is_close(y, -2.67608) && is_close(z, -5.42566))) {
+        num_fails++;
+        printf("failed test 3\n");
+    }
+
+    // test 4
+    bezEvaluate3D(9.82, 9.25, -9.31,
+                  5.15, -1.5, 3.32,
+                  0.215,
+                  &x, &y, &z);
+
+    if (!(is_close(x, 8.81595) && is_close(y, 6.93875) && is_close(z, -6.59455))) {
+        num_fails++;
+        printf("failed test 4\n");
+    }
+
+    // test 5
+    bezEvaluate3D(-5.63, 5.03, 5.33,
+                  -4.22, 9.68, -1.25,
+                  0.246,
+                  &x, &y, &z);
+
+    if (!(is_close(x, -5.28314) && is_close(y, 6.1739) && is_close(z, 3.71132))) {
         num_fails++;
         printf("failed test 5\n");
     }
