@@ -4,6 +4,8 @@
  * Defines and implements several functions that are helpful for benchmarking.
  */
 
+#ifndef BEZIER_BENCHMARK_H
+#define BEZIER_BENCHMARK_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -93,3 +95,5 @@ void printAndLog(FILE* log_file, BOOL log, char* format, ...) {
         va_end(args);
     }
 }
+
+#endif
