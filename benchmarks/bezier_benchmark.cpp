@@ -180,6 +180,60 @@ int main(int argc, char* argv[]) {
         duration * 1e6 / (double)(num_executions));
 
 
+    //*************************************************************************
+    printAndLog(log_file, log, "\nTiming function bezDerivative2D (CUBIC):\n");
+    //*************************************************************************
+
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
+        bezDerivative2D(8., -8.5,
+                        2.5, 3.17,
+                        -3.92, -8.5,
+                        -5.33, -0.17,
+                        &a0, &b0,
+                        &a1, &b1,
+                        &a2, &b2);
+    );
+
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
+
+
+    //*************************************************************************
+    printAndLog(log_file, log, "\nTiming function bezDerivative2D (QUADRATIC):\n");
+    //*************************************************************************
+
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
+        bezDerivative2D(8., -8.5,
+                        2.5, 3.17,
+                        -3.92, -8.5,
+                        &a0, &b0,
+                        &a1, &b1);
+    );
+
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
+
+
+    //*************************************************************************
+    printAndLog(log_file, log, "\nTiming function bezDerivative2D (LINEAR):\n");
+    //*************************************************************************
+
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
+        bezDerivative2D(8., -8.5,
+                        2.5, 3.17,
+                        &a0, &b0);
+    );
+
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
+
+
     printAndLog(log_file, log, "\n\nThis concludes the benchmarks for bezier.h\n");
 
     fclose(log_file);
