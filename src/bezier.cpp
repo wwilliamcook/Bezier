@@ -6,6 +6,8 @@
 
 #include "bezier.h"
 
+#include <math.h>
+
 
 //*****************************************************************************
 //* EVALUATE
@@ -429,4 +431,213 @@ void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
                      BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out) {
     *x0_out = x1 - x0;
     *y0_out = y1 - y0;
+}
+
+
+//*****************************************************************************
+//* BOUNDING BOX
+//*****************************************************************************
+
+/*
+ * function: bezBoundingBox2D
+ *
+ * Computes the coordinates of an axis-aligned bounding box.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second control point
+ *   x3, y3: coordinates of second anchor point
+ *   x_min, y_min: references to the lower left corner of the box (output)
+ *   x_max, y_max: references to the upper right corner of the box (output)
+ */
+void bezBoundingBox2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                      BEZ_DTYPE x1, BEZ_DTYPE y1,
+                      BEZ_DTYPE x2, BEZ_DTYPE y2,
+                      BEZ_DTYPE x3, BEZ_DTYPE y3,
+                      BEZ_DTYPE* x_min, BEZ_DTYPE* y_min,
+                      BEZ_DTYPE* x_max, BEZ_DTYPE* y_max) {
+    BEZ_DTYPE a, b, c;
+    BEZ_DTYPE t0, t1;  // t values at which the derivative is zero
+    BEZ_DTYPE disc, sqrtdisc;  // discriminant in quadratic formula
+    BEZ_DTYPE temp1, temp2;
+    int num_t;
+
+    // CALCULATE MIN/MAX FOR X
+    a = 3. * (-x0 + 3. * x1 - 3. * x2 + x3);
+    b = 6. * (x0 - 2. * x1 + x2);
+    c = 3. * (-x0 + x1);
+
+    if (x0 < x3) {
+        *x_min = x0;
+        *x_max = x3;
+    }
+    else {
+        *x_min = x3;
+        *x_max = x0;
+    }
+
+    disc = b * b - 4. * a * c;
+
+    if (disc > 0.) {
+#if BEZ_DTYPE_FLOAT
+        sqrtdisc = sqrtf(disc);
+#else
+        sqrtdisc = sqrt(disc);
+#endif
+
+        temp1 = 1. / (2. * a);
+        temp2 = -b;
+
+        t0 = (temp2 - sqrtdisc) * temp1;
+        t1 = (temp2 + sqrtdisc) * temp1;
+
+        if (t0 < 0. || t0 > 1.) {
+            if (t1 < 0. || t1 > 1.) {
+                num_t = 0;
+            }
+            else {
+                t0 = t1;
+                num_t = 1;
+            }
+        }
+        else if (t1 < 0. || t1 > 1.) {
+            num_t = 1;
+        }
+        else {
+            num_t = 2;
+        }
+    }
+    else if (disc == 0.) {
+        t0 = -b / (2. * a);
+
+        if (t0 < 0. || t0 > 1.) {
+            num_t = 0;
+        }
+        else {
+            num_t = 1;
+        }
+    }
+    else {
+        num_t = 0;
+    }
+
+    switch (num_t) {
+    case 2:
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t0, &temp1, &temp2);
+        if (temp1 < *x_min) {
+            *x_min = temp1;
+        }
+        if (temp1 > *x_max) {
+            *x_max = temp1;
+        }
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t1, &temp1, &temp2);
+        if (temp1 < *x_min) {
+            *x_min = temp1;
+        }
+        if (temp1 > *x_max) {
+            *x_max = temp1;
+        }
+        break;
+    case 1:
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t0, &temp1, &temp2);
+        if (temp1 < *x_min) {
+            *x_min = temp1;
+        }
+        if (temp1 > *x_max) {
+            *x_max = temp1;
+        }
+        break;
+    case 0:
+        break;
+    }
+
+    // CALCULATE MIN/MAX FOR Y
+    a = 3. * (-y0 + 3. * y1 - 3. * y2 + y3);
+    b = 6. * (y0 - 2. * y1 + y2);
+    c = 3. * (-y0 + y1);
+
+    if (y0 < y3) {
+        *y_min = y0;
+        *y_max = y3;
+    }
+    else {
+        *y_min = y3;
+        *y_max = y0;
+    }
+
+    disc = b * b - 4. * a * c;
+
+    if (disc > 0.) {
+#if BEZ_DTYPE_FLOAT
+        sqrtdisc = sqrtf(disc);
+#else
+        sqrtdisc = sqrt(disc);
+#endif
+
+        temp1 = 1. / (2. * a);
+        temp2 = -b;
+
+        t0 = (temp2 - sqrtdisc) * temp1;
+        t1 = (temp2 + sqrtdisc) * temp1;
+
+        if (t0 < 0. || t0 > 1.) {
+            if (t1 < 0. || t1 > 1.) {
+                num_t = 0;
+            }
+            else {
+                t0 = t1;
+                num_t = 1;
+            }
+        }
+        else if (t1 < 0. || t1 > 1.) {
+            num_t = 1;
+        }
+        else {
+            num_t = 2;
+        }
+    }
+    else if (disc == 0.) {
+        t0 = -b / (2. * a);
+
+        if (t0 < 0. || t0 > 1.) {
+            num_t = 0;
+        }
+        else {
+            num_t = 1;
+        }
+    }
+    else {
+        num_t = 0;
+    }
+
+    switch (num_t) {
+    case 2:
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t0, &temp1, &temp2);
+        if (temp2 < *y_min) {
+            *y_min = temp2;
+        }
+        if (temp2 > *y_max) {
+            *y_max = temp2;
+        }
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t1, &temp1, &temp2);
+        if (temp2 < *y_min) {
+            *y_min = temp2;
+        }
+        if (temp2 > *y_max) {
+            *y_max = temp2;
+        }
+        break;
+    case 1:
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t0, &temp1, &temp2);
+        if (temp2 < *y_min) {
+            *y_min = temp2;
+        }
+        if (temp2 > *y_max) {
+            *y_max = temp2;
+        }
+        break;
+    case 0:
+        break;
+    }
 }

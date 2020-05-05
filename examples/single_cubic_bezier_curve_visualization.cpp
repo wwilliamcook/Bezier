@@ -26,6 +26,11 @@ void drawBezier(float x0, float y0,
                 float x2, float y2,
                 float x3, float y3);
 
+void drawBoundingBox(float x0, float y0,
+                     float x1, float y1,
+                     float x2, float y2,
+                     float x3, float y3);
+
 
 int main(int argc, char* argv[])
 {
@@ -99,6 +104,12 @@ int main(int argc, char* argv[])
             drawCircle(control_points[i][0], control_points[i][1], CONTROL_RADIUS, MATH_TAU * .05);
         }
 
+        glColor3f(.2f, .8f, .4f);
+        drawBoundingBox(control_points[0][0], control_points[0][1],
+                        control_points[1][0], control_points[1][1],
+                        control_points[2][0], control_points[2][1],
+                        control_points[3][0], control_points[3][1]);
+
         glColor3f(1.f, 1.f, 1.f);
         drawBezier(control_points[0][0], control_points[0][1],
                    control_points[1][0], control_points[1][1],
@@ -141,5 +152,21 @@ void drawBezier(float x0, float y0,
         last_x = curr_x;
         last_y = curr_y;
     }
+    glEnd();
+}
+
+void drawBoundingBox(float x0, float y0,
+                     float x1, float y1,
+                     float x2, float y2,
+                     float x3, float y3) {
+    float x_min, x_max, y_min, y_max;
+
+    bezBoundingBox2D(x0, y0, x1, y1, x2, y2, x3, y3, &x_min, &y_min, &x_max, &y_max);
+
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(x_min, y_min);
+    glVertex2f(x_min, y_max);
+    glVertex2f(x_max, y_max);
+    glVertex2f(x_max, y_min);
     glEnd();
 }

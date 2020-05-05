@@ -8,6 +8,7 @@
 #define BEZIER_BEZIER_H
 
 #define BEZ_DTYPE float
+#define BEZ_DTYPE_FLOAT 1
 
 
 //*****************************************************************************
@@ -262,5 +263,30 @@ void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
 void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
                      BEZ_DTYPE x1, BEZ_DTYPE y1,
                      BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out);
+
+
+//*****************************************************************************
+//* BOUNDING BOX
+//*****************************************************************************
+
+/*
+ * function: bezBoundingBox2D
+ *
+ * Computes the coordinates of an axis-aligned bounding box.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second control point
+ *   x3, y3: coordinates of second anchor point
+ *   x_min, y_min: references to the lower left corner of the box (output)
+ *   x_max, y_max: references to the upper right corner of the box (output)
+ */
+void bezBoundingBox2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                      BEZ_DTYPE x1, BEZ_DTYPE y1,
+                      BEZ_DTYPE x2, BEZ_DTYPE y2,
+                      BEZ_DTYPE x3, BEZ_DTYPE y3,
+                      BEZ_DTYPE* x_min, BEZ_DTYPE* y_min,
+                      BEZ_DTYPE* x_max, BEZ_DTYPE* y_max);
 
 #endif
