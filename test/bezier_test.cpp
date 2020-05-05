@@ -16,7 +16,9 @@
 #define BEZ_TRUE 1
 #define BEZ_FALSE 0
 
-#define ERROR_TOLERANCE 0.000001
+#define ERROR_TOLERANCE 1e-6
+#define DERIVATIVE_DELTA 1e-4
+#define DERIVATIVE_ERROR_TOLERANCE 1e-1
 
 
 /*
@@ -678,6 +680,127 @@ int main(int argc, char* argv[]) {
 
         if (failed) {
             num_fails++;
+        }
+    }
+
+    if (num_fails == 0) {
+        printf("all %d tests passed\n", num_tests);
+    }
+    else {
+        printf("failed %d/%d tests\n", num_fails, num_tests);
+    }
+    num_tests = num_fails = -1;
+
+
+    //*************************************************************************
+    printf("\nTesting function bezDerivative2D (CUBIC):\n");
+    //*************************************************************************
+    num_tests = 5;
+    num_fails = 0;
+    failed = BEZ_FALSE;
+
+    for (i = 0; i < num_tests; i++) {
+        x0 = randomUniform(-10., 10.);
+        y0 = randomUniform(-10., 10.);
+        x1 = randomUniform(-10., 10.);
+        y1 = randomUniform(-10., 10.);
+        x2 = randomUniform(-10., 10.);
+        y2 = randomUniform(-10., 10.);
+        x3 = randomUniform(-10., 10.);
+        y3 = randomUniform(-10., 10.);
+        t = randomUniform(0., 1.);
+
+        // compute derivative at t
+        bezDerivative2D(x0, y0, x1, y1, x2, y2, x3, y3, &a0, &b0, &a1, &b1, &a2, &b2);
+        bezEvaluate2D(a0, b0, a1, b1, a2, b2, t, &a, &b);
+
+        // compute estimate of derivative at t
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t + DERIVATIVE_DELTA, &d0, &e0);
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t - DERIVATIVE_DELTA, &d1, &e1);
+        d0 = (d0 - d1) / (2. * DERIVATIVE_DELTA);
+        e0 = (e0 - e1) / (2. * DERIVATIVE_DELTA);
+        
+        if (sqrt(pow(d0 - a, 2.) + pow(e0 - b, 2.)) > DERIVATIVE_ERROR_TOLERANCE) {
+            num_fails++;
+            printf("failed test %d\n", i + 1);
+        }
+    }
+
+    if (num_fails == 0) {
+        printf("all %d tests passed\n", num_tests);
+    }
+    else {
+        printf("failed %d/%d tests\n", num_fails, num_tests);
+    }
+    num_tests = num_fails = -1;
+
+
+    //*************************************************************************
+    printf("\nTesting function bezDerivative2D (QUADRATIC):\n");
+    //*************************************************************************
+    num_tests = 5;
+    num_fails = 0;
+    failed = BEZ_FALSE;
+
+    for (i = 0; i < num_tests; i++) {
+        x0 = randomUniform(-10., 10.);
+        y0 = randomUniform(-10., 10.);
+        x1 = randomUniform(-10., 10.);
+        y1 = randomUniform(-10., 10.);
+        x2 = randomUniform(-10., 10.);
+        y2 = randomUniform(-10., 10.);
+        t = randomUniform(0., 1.);
+
+        // compute derivative at t
+        bezDerivative2D(x0, y0, x1, y1, x2, y2, &a0, &b0, &a1, &b1);
+        bezEvaluate2D(a0, b0, a1, b1, t, &a, &b);
+
+        // compute estimate of derivative at t
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, t + DERIVATIVE_DELTA, &d0, &e0);
+        bezEvaluate2D(x0, y0, x1, y1, x2, y2, t - DERIVATIVE_DELTA, &d1, &e1);
+        d0 = (d0 - d1) / (2. * DERIVATIVE_DELTA);
+        e0 = (e0 - e1) / (2. * DERIVATIVE_DELTA);
+        
+        if (sqrt(pow(d0 - a, 2.) + pow(e0 - b, 2.)) > DERIVATIVE_ERROR_TOLERANCE) {
+            num_fails++;
+            printf("failed test %d\n", i + 1);
+        }
+    }
+
+    if (num_fails == 0) {
+        printf("all %d tests passed\n", num_tests);
+    }
+    else {
+        printf("failed %d/%d tests\n", num_fails, num_tests);
+    }
+    num_tests = num_fails = -1;
+
+
+    //*************************************************************************
+    printf("\nTesting function bezDerivative2D (LINEAR):\n");
+    //*************************************************************************
+    num_tests = 5;
+    num_fails = 0;
+    failed = BEZ_FALSE;
+
+    for (i = 0; i < num_tests; i++) {
+        x0 = randomUniform(-10., 10.);
+        y0 = randomUniform(-10., 10.);
+        x1 = randomUniform(-10., 10.);
+        y1 = randomUniform(-10., 10.);
+        t = randomUniform(0., 1.);
+
+        bezDerivative2D(x0, y0, x1, y1, &a, &b);
+
+        // compute estimate of derivative at t
+        bezEvaluate2D(x0, y0, x1, y1, t + DERIVATIVE_DELTA, &d0, &e0);
+        bezEvaluate2D(x0, y0, x1, y1, t - DERIVATIVE_DELTA, &d1, &e1);
+        d0 = (d0 - d1) / (2. * DERIVATIVE_DELTA);
+        e0 = (e0 - e1) / (2. * DERIVATIVE_DELTA);
+        
+        if (sqrt(pow(d0 - a, 2.) + pow(e0 - b, 2.)) > DERIVATIVE_ERROR_TOLERANCE) {
+            num_fails++;
+            printf("failed test %d\n", i + 1);
         }
     }
 

@@ -7,6 +7,10 @@
 #include "bezier.h"
 
 
+//*****************************************************************************
+//* EVALUATE
+//*****************************************************************************
+
 /*
  * function: bezEvaluate2D
  * 
@@ -177,6 +181,10 @@ void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
 }
 
 
+//*****************************************************************************
+//* SPLIT
+//*****************************************************************************
+
 /*
  * function: bezSplitCurve2D
  * 
@@ -341,4 +349,84 @@ void bezSplitCurve3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
     *x3_out0 = *x0_out1 = omt * x0 + t * x1;
     *y3_out0 = *y0_out1 = omt * y0 + t * y1;
     *z3_out0 = *z0_out1 = omt * z0 + t * z1;
+}
+
+
+//*****************************************************************************
+//* DERIVATIVE
+//*****************************************************************************
+
+/*
+ * function: bezDerivative2D
+ * 
+ * Calculates the derivative of a cubic Bezier curve and returns the result as
+ * the points of a quadratic Bezier curve.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second control point
+ *   x3, y3: coordinates of second anchor point
+ *   x0_out, y0_out: references for the first anchor point of the derivative
+ *   x1_out, y1_out: references for the control point of the derivative
+ *   x2_out, y2_out: references for the second anchor point of the derivative
+ */
+void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                     BEZ_DTYPE x1, BEZ_DTYPE y1,
+                     BEZ_DTYPE x2, BEZ_DTYPE y2,
+                     BEZ_DTYPE x3, BEZ_DTYPE y3,
+                     BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out,
+                     BEZ_DTYPE *x1_out, BEZ_DTYPE *y1_out,
+                     BEZ_DTYPE *x2_out, BEZ_DTYPE *y2_out) {
+    *x0_out = 3. * (x1 - x0);
+    *y0_out = 3. * (y1 - y0);
+
+    *x1_out = 3. * (x2 - x1);
+    *y1_out = 3. * (y2 - y1);
+
+    *x2_out = 3. * (x3 - x2);
+    *y2_out = 3. * (y3 - y2);
+}
+
+/*
+ * function: bezDerivative2D
+ * 
+ * Calculates the derivative of a quadratic Bezier curve and returns the result
+ * as the points of a linear Bezier curve.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second anchor point
+ *   x0_out, y0_out: references for the first anchor point of the derivative
+ *   x1_out, y1_out: references for the second anchor point of the derivative
+ */
+void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                     BEZ_DTYPE x1, BEZ_DTYPE y1,
+                     BEZ_DTYPE x2, BEZ_DTYPE y2,
+                     BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out,
+                     BEZ_DTYPE *x1_out, BEZ_DTYPE *y1_out) {
+    *x0_out = 2. * (x1 - x0);
+    *y0_out = 2. * (y1 - y0);
+
+    *x1_out = 2. * (x2 - x1);
+    *y1_out = 2. * (y2 - y1);
+}
+
+/*
+ * function: bezDerivative2D
+ * 
+ * Calculates the derivative of a linear Bezier curve.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second anchor point
+ *   x0_out, y0_out: references for the derivative
+ */
+void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                     BEZ_DTYPE x1, BEZ_DTYPE y1,
+                     BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out) {
+    *x0_out = x1 - x0;
+    *y0_out = y1 - y0;
 }
