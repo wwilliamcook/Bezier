@@ -17,8 +17,8 @@
 
 
 // constants used to determine how long to time an operation
-#define MIN_DURATION 2.
-#define MAX_DURATION 5.
+#define MIN_DURATION 1.
+#define MAX_DURATION 2.
 
 // name of file to log the benchmarks to
 #define LOG_FILE_NAME "bezier_benchmark.log"
@@ -56,16 +56,16 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezEvaluate2D:\n");
+    printAndLog(log_file, log, "\nTiming function bezEvaluate2D (CUBIC):\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
         bezEvaluate2D(8., -8.5,
-            2.5, 3.17,
-            -3.92, -8.5,
-            -5.33, -0.17,
-            0.48,
-            &x, &y);
+                      2.5, 3.17,
+                      -3.92, -8.5,
+                      -5.33, -0.17,
+                      0.48,
+                      &x, &y);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -75,7 +75,42 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezEvaluate3D:\n");
+    printAndLog(log_file, log, "\nTiming function bezEvaluate2D (QUADRATIC):\n");
+    //*************************************************************************
+
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
+        bezEvaluate2D(8., -8.5,
+                      2.5, 3.17,
+                      -3.92, -8.5,
+                      0.48,
+                      &x, &y);
+    );
+
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
+
+
+    //*************************************************************************
+    printAndLog(log_file, log, "\nTiming function bezEvaluate2D (LINEAR):\n");
+    //*************************************************************************
+
+    timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
+        bezEvaluate2D(8., -8.5,
+                      2.5, 3.17,
+                      0.48,
+                      &x, &y);
+    );
+
+    printAndLog(log_file, log, "million operations per second: %f\n",
+        (double)(num_executions) / duration * 1e-6);
+    printAndLog(log_file, log, "microseconds per operation:    %f\n",
+        duration * 1e6 / (double)(num_executions));
+
+
+    //*************************************************************************
+    printAndLog(log_file, log, "\nTiming function bezEvaluate3D (CUBIC):\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
