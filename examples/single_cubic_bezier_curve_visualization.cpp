@@ -146,7 +146,7 @@ void drawBezier(float x0, float y0,
     last_x = x0;
     last_y = y0;
     for (t = STEP_SIZE; t < 1; t += STEP_SIZE) {
-        bezEvaluate2D(x0, y0, x1, y1, x2, y2, x3, y3, t, &curr_x, &curr_y);
+        bez2Evaluate(x0, y0, x1, y1, x2, y2, x3, y3, t, &curr_x, &curr_y);
         glVertex2f(last_x, last_y);
         glVertex2f(curr_x, curr_y);
         last_x = curr_x;
@@ -161,7 +161,7 @@ void drawBoundingBox(float x0, float y0,
                      float x3, float y3) {
     float x_min, x_max, y_min, y_max;
 
-    bezBoundingBox2D(x0, y0, x1, y1, x2, y2, x3, y3, &x_min, &y_min, &x_max, &y_max);
+    bez2BoundingBox(x0, y0, x1, y1, x2, y2, x3, y3, &x_min, &y_min, &x_max, &y_max);
 
     glBegin(GL_LINE_LOOP);
     glVertex2f(x_min, y_min);

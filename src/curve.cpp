@@ -88,12 +88,12 @@ bezVect2D Curve2D::getPositionAt(BEZ_DTYPE t) const {
     t = fmod(t, 1.);
     bezVect2D out;
 
-    bezEvaluate2D(points[bez_i][0], points[bez_i][1],
-                  points[bez_i + 1][0], points[bez_i + 1][1],
-                  points[bez_i + 2][0], points[bez_i + 2][1],
-                  points[bez_i + 3][0], points[bez_i + 3][1],
-                  t,
-                  &out[0], &out[1]);
+    bez2Evaluate(points[bez_i][0], points[bez_i][1],
+                 points[bez_i + 1][0], points[bez_i + 1][1],
+                 points[bez_i + 2][0], points[bez_i + 2][1],
+                 points[bez_i + 3][0], points[bez_i + 3][1],
+                 t,
+                 &out[0], &out[1]);
 
     return out;
 }

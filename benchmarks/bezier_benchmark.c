@@ -1,5 +1,5 @@
 /*
- * bezier_test.cpp
+ * bezier_benchmark.c
  * 
  * Performs benchmarks on the functions defined in bezier.h and prints them to
  * the screen while logging them to a file.
@@ -56,16 +56,16 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezEvaluate2D (CUBIC):\n");
+    printAndLog(log_file, log, "\nTiming function bez2Evaluate:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezEvaluate2D(8., -8.5,
-                      2.5, 3.17,
-                      -3.92, -8.5,
-                      -5.33, -0.17,
-                      0.48,
-                      &x, &y);
+        bez2Evaluate(8., -8.5,
+                     2.5, 3.17,
+                     -3.92, -8.5,
+                     -5.33, -0.17,
+                     0.48,
+                     &x, &y);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -75,15 +75,15 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezEvaluate2D (QUADRATIC):\n");
+    printAndLog(log_file, log, "\nTiming function bez2EvaluateQuadratic:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezEvaluate2D(8., -8.5,
-                      2.5, 3.17,
-                      -3.92, -8.5,
-                      0.48,
-                      &x, &y);
+        bez2EvaluateQuadratic(8., -8.5,
+                              2.5, 3.17,
+                              -3.92, -8.5,
+                              0.48,
+                              &x, &y);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -93,14 +93,14 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezEvaluate2D (LINEAR):\n");
+    printAndLog(log_file, log, "\nTiming function bez2EvaluateLinear:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezEvaluate2D(8., -8.5,
-                      2.5, 3.17,
-                      0.48,
-                      &x, &y);
+        bez2EvaluateLinear(8., -8.5,
+                           2.5, 3.17,
+                           0.48,
+                           &x, &y);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -110,16 +110,16 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezEvaluate3D (CUBIC):\n");
+    printAndLog(log_file, log, "\nTiming function bez3Evaluate:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezEvaluate3D(-0.085, -3.165, -5.487,
-            -2.688, 0.121, -9.054,
-            3.462, -4.075, 2.702,
-            1.990, -3.235, -9.770,
-            0.770,
-            &x, &y, &z);
+        bez3Evaluate(-0.085, -3.165, -5.487,
+                     -2.688, 0.121, -9.054,
+                     3.462, -4.075, 2.702,
+                     1.990, -3.235, -9.770,
+                     0.770,
+                     &x, &y, &z);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -129,23 +129,23 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezSplitCurve2D:\n");
+    printAndLog(log_file, log, "\nTiming function bez2SplitCurve:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezSplitCurve2D(8., -8.5,
-            2.5, 3.17,
-            -3.92, -8.5,
-            -5.33, -0.17,
-            0.48,
-            &a0, &b0,
-            &a1, &b1,
-            &a2, &b2,
-            &a3, &b3,
-            &d0, &e0,
-            &d1, &e1,
-            &d2, &e2,
-            &d3, &e3);
+        bez2SplitCurve(8., -8.5,
+                       2.5, 3.17,
+                       -3.92, -8.5,
+                       -5.33, -0.17,
+                       0.48,
+                       &a0, &b0,
+                       &a1, &b1,
+                       &a2, &b2,
+                       &a3, &b3,
+                       &d0, &e0,
+                       &d1, &e1,
+                       &d2, &e2,
+                       &d3, &e3);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -155,23 +155,23 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezSplitCurve3D:\n");
+    printAndLog(log_file, log, "\nTiming function bez3SplitCurve:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezSplitCurve3D(-0.085, -3.165, -5.487,
-            -2.688, 0.121, -9.054,
-            3.462, -4.075, 2.702,
-            1.990, -3.235, -9.770,
-            0.770,
-            &a0, &b0, &c0,
-            &a1, &b1, &c1,
-            &a2, &b2, &c2,
-            &a3, &b3, &c3,
-            &d0, &e0, &f0,
-            &d1, &e1, &f1,
-            &d2, &e2, &f2,
-            &d3, &e3, &f3);
+        bez3SplitCurve(-0.085, -3.165, -5.487,
+                       -2.688, 0.121, -9.054,
+                       3.462, -4.075, 2.702,
+                       1.990, -3.235, -9.770,
+                       0.770,
+                       &a0, &b0, &c0,
+                       &a1, &b1, &c1,
+                       &a2, &b2, &c2,
+                       &a3, &b3, &c3,
+                       &d0, &e0, &f0,
+                       &d1, &e1, &f1,
+                       &d2, &e2, &f2,
+                       &d3, &e3, &f3);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -181,17 +181,17 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezDerivative2D (CUBIC):\n");
+    printAndLog(log_file, log, "\nTiming function bez2Derivative:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezDerivative2D(8., -8.5,
-                        2.5, 3.17,
-                        -3.92, -8.5,
-                        -5.33, -0.17,
-                        &a0, &b0,
-                        &a1, &b1,
-                        &a2, &b2);
+        bez2Derivative(8., -8.5,
+                       2.5, 3.17,
+                       -3.92, -8.5,
+                       -5.33, -0.17,
+                       &a0, &b0,
+                       &a1, &b1,
+                       &a2, &b2);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -201,15 +201,15 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezDerivative2D (QUADRATIC):\n");
+    printAndLog(log_file, log, "\nTiming function bez2DerivativeQuadratic:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezDerivative2D(8., -8.5,
-                        2.5, 3.17,
-                        -3.92, -8.5,
-                        &a0, &b0,
-                        &a1, &b1);
+        bez2DerivativeQuadratic(8., -8.5,
+                                2.5, 3.17,
+                                -3.92, -8.5,
+                                &a0, &b0,
+                                &a1, &b1);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",
@@ -219,13 +219,13 @@ int main(int argc, char* argv[]) {
 
 
     //*************************************************************************
-    printAndLog(log_file, log, "\nTiming function bezDerivative2D (LINEAR):\n");
+    printAndLog(log_file, log, "\nTiming function bez2DerivativeLinear:\n");
     //*************************************************************************
 
     timeThisCode(MIN_DURATION, MAX_DURATION, duration, num_executions,
-        bezDerivative2D(8., -8.5,
-                        2.5, 3.17,
-                        &a0, &b0);
+        bez2DerivativeLinear(8., -8.5,
+                             2.5, 3.17,
+                             &a0, &b0);
     );
 
     printAndLog(log_file, log, "million operations per second: %f\n",

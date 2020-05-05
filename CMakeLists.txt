@@ -15,7 +15,7 @@ add_subdirectory(deps/GLFW)
 # LIBRARIES
 ###############################################################################
 
-add_library(Bezier src/bezier.cpp include/bezier.h)
+add_library(Bezier src/bezier.c include/bezier.h)
 target_include_directories(Bezier PRIVATE include)
 
 add_library(Curve src/curve.cpp include/curve.h)
@@ -27,7 +27,7 @@ target_link_libraries(Curve Bezier)
 # TESTS
 ###############################################################################
 
-add_executable(test-bezier_library test/bezier_test.cpp)
+add_executable(test-bezier_library test/bezier_test.c)
 target_include_directories(test-bezier_library PRIVATE include)
 target_link_libraries(test-bezier_library Bezier)
 
@@ -61,6 +61,6 @@ target_link_libraries(Example-FiveAnchorVisualization
 # BENCHMARKS
 ###############################################################################
 
-add_executable(benchmark-bezier_library benchmarks/bezier_benchmark.cpp)
+add_executable(benchmark-bezier_library benchmarks/bezier_benchmark.c)
 target_include_directories(benchmark-bezier_library PRIVATE include)
 target_link_libraries(benchmark-bezier_library Bezier)

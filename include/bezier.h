@@ -11,12 +11,18 @@
 #define BEZ_DTYPE_FLOAT 1
 
 
+// Allow linkage with C++ code
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 //*****************************************************************************
 //* EVALUATE
 //*****************************************************************************
 
 /*
- * function: bezEvaluate2D
+ * function: bez2Evaluate
  * 
  * Evaluates the position of a cubic Bezier curve at the given t using the
  * definition equation.
@@ -29,15 +35,15 @@
  *   t: value of t at which to evaluate the curve
  *   x_out, y_out: references where the output coordinates are stored
  */
-void bezEvaluate2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                   BEZ_DTYPE x1, BEZ_DTYPE y1,
-                   BEZ_DTYPE x2, BEZ_DTYPE y2,
-                   BEZ_DTYPE x3, BEZ_DTYPE y3,
-                   BEZ_DTYPE t,
-                   BEZ_DTYPE *x_out, BEZ_DTYPE *y_out);
+void bez2Evaluate(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                  BEZ_DTYPE x1, BEZ_DTYPE y1,
+                  BEZ_DTYPE x2, BEZ_DTYPE y2,
+                  BEZ_DTYPE x3, BEZ_DTYPE y3,
+                  BEZ_DTYPE t,
+                  BEZ_DTYPE *x_out, BEZ_DTYPE *y_out);
 
 /*
- * function: bezEvaluate2D
+ * function: bez2EvaluateQuadratic
  * 
  * Evaluates the position of a quadratic Bezier curve at the given t using the
  * definition equation.
@@ -49,14 +55,14 @@ void bezEvaluate2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
  *   t: value of t at which to evaluate the curve
  *   x_out, y_out: references where the output coordinates are stored
  */
-void bezEvaluate2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                   BEZ_DTYPE x1, BEZ_DTYPE y1,
-                   BEZ_DTYPE x2, BEZ_DTYPE y2,
-                   BEZ_DTYPE t,
-                   BEZ_DTYPE *x_out, BEZ_DTYPE *y_out);
+void bez2EvaluateQuadratic(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                           BEZ_DTYPE x1, BEZ_DTYPE y1,
+                           BEZ_DTYPE x2, BEZ_DTYPE y2,
+                           BEZ_DTYPE t,
+                           BEZ_DTYPE *x_out, BEZ_DTYPE *y_out);
 
 /*
- * function: bezEvaluate2D
+ * function: bez2EvaluateLinear
  * 
  * Evaluates the position of a linear Bezier curve at the given t using the
  * definition equation.
@@ -67,13 +73,13 @@ void bezEvaluate2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
  *   t: value of t at which to evaluate the curve
  *   x_out, y_out: references where the output coordinates are stored
  */
-void bezEvaluate2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                   BEZ_DTYPE x1, BEZ_DTYPE y1,
-                   BEZ_DTYPE t,
-                   BEZ_DTYPE *x_out, BEZ_DTYPE *y_out);
+void bez2EvaluateLinear(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                        BEZ_DTYPE x1, BEZ_DTYPE y1,
+                        BEZ_DTYPE t,
+                        BEZ_DTYPE *x_out, BEZ_DTYPE *y_out);
 
 /*
- * function: bezEvaluate3D
+ * function: bez3Evaluate
  * 
  * Evaluates the position of a cubic Bezier curve at the given t using the
  * definition equation.
@@ -86,15 +92,15 @@ void bezEvaluate2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
  *   t: value of t at which to evaluate the curve
  *   x_out, y_out, z_out: references where the output coordinates are stored
  */
-void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
-                   BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
-                   BEZ_DTYPE x2, BEZ_DTYPE y2, BEZ_DTYPE z2,
-                   BEZ_DTYPE x3, BEZ_DTYPE y3, BEZ_DTYPE z3,
-                   BEZ_DTYPE t,
-                   BEZ_DTYPE *x_out, BEZ_DTYPE *y_out, BEZ_DTYPE *z_out);
+void bez3Evaluate(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
+                  BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
+                  BEZ_DTYPE x2, BEZ_DTYPE y2, BEZ_DTYPE z2,
+                  BEZ_DTYPE x3, BEZ_DTYPE y3, BEZ_DTYPE z3,
+                  BEZ_DTYPE t,
+                  BEZ_DTYPE *x_out, BEZ_DTYPE *y_out, BEZ_DTYPE *z_out);
 
 /*
- * function: bezEvaluate3D
+ * function: bez3EvaluateQuadratic
  * 
  * Evaluates the position of a quadratic Bezier curve at the given t using the
  * definition equation.
@@ -106,14 +112,14 @@ void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
  *   t: value of t at which to evaluate the curve
  *   x_out, y_out, z_out: references where the output coordinates are stored
  */
-void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
-                   BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
-                   BEZ_DTYPE x2, BEZ_DTYPE y2, BEZ_DTYPE z2,
-                   BEZ_DTYPE t,
-                   BEZ_DTYPE *x_out, BEZ_DTYPE *y_out, BEZ_DTYPE *z_out);
+void bez3EvaluateQuadratic(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
+                           BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
+                           BEZ_DTYPE x2, BEZ_DTYPE y2, BEZ_DTYPE z2,
+                           BEZ_DTYPE t,
+                           BEZ_DTYPE *x_out, BEZ_DTYPE *y_out, BEZ_DTYPE *z_out);
 
 /*
- * function: bezEvaluate3D
+ * function: bez3EvaluateLinear
  * 
  * Evaluates the position of a linear Bezier curve at the given t using the
  * definition equation.
@@ -124,10 +130,10 @@ void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
  *   t: value of t at which to evaluate the curve
  *   x_out, y_out, z_out: references where the output coordinates are stored
  */
-void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
-                   BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
-                   BEZ_DTYPE t,
-                   BEZ_DTYPE *x_out, BEZ_DTYPE *y_out, BEZ_DTYPE *z_out);
+void bez3EvaluateLinear(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
+                        BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
+                        BEZ_DTYPE t,
+                        BEZ_DTYPE *x_out, BEZ_DTYPE *y_out, BEZ_DTYPE *z_out);
 
 
 //*****************************************************************************
@@ -135,7 +141,7 @@ void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
 //*****************************************************************************
 
 /*
- * function: bezSplitCurve2D
+ * function: bez2SplitCurve
  * 
  * Splits the Bezier curve into two sub-curves at the given t.
  * 
@@ -154,22 +160,22 @@ void bezEvaluate3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
  *   x2_out1, y2_out1: output for the second control point of the second sub-curve
  *   x3_out1, y3_out1: output for the second anchor point of the second sub-curve
  */
-void bezSplitCurve2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                     BEZ_DTYPE x1, BEZ_DTYPE y1,
-                     BEZ_DTYPE x2, BEZ_DTYPE y2,
-                     BEZ_DTYPE x3, BEZ_DTYPE y3,
-                     BEZ_DTYPE t,
-                     BEZ_DTYPE *x0_out0, BEZ_DTYPE *y0_out0,
-                     BEZ_DTYPE *x1_out0, BEZ_DTYPE *y1_out0,
-                     BEZ_DTYPE *x2_out0, BEZ_DTYPE *y2_out0,
-                     BEZ_DTYPE *x3_out0, BEZ_DTYPE *y3_out0,
-                     BEZ_DTYPE *x0_out1, BEZ_DTYPE *y0_out1,
-                     BEZ_DTYPE *x1_out1, BEZ_DTYPE *y1_out1,
-                     BEZ_DTYPE *x2_out1, BEZ_DTYPE *y2_out1,
-                     BEZ_DTYPE *x3_out1, BEZ_DTYPE *y3_out1);
+void bez2SplitCurve(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                    BEZ_DTYPE x1, BEZ_DTYPE y1,
+                    BEZ_DTYPE x2, BEZ_DTYPE y2,
+                    BEZ_DTYPE x3, BEZ_DTYPE y3,
+                    BEZ_DTYPE t,
+                    BEZ_DTYPE *x0_out0, BEZ_DTYPE *y0_out0,
+                    BEZ_DTYPE *x1_out0, BEZ_DTYPE *y1_out0,
+                    BEZ_DTYPE *x2_out0, BEZ_DTYPE *y2_out0,
+                    BEZ_DTYPE *x3_out0, BEZ_DTYPE *y3_out0,
+                    BEZ_DTYPE *x0_out1, BEZ_DTYPE *y0_out1,
+                    BEZ_DTYPE *x1_out1, BEZ_DTYPE *y1_out1,
+                    BEZ_DTYPE *x2_out1, BEZ_DTYPE *y2_out1,
+                    BEZ_DTYPE *x3_out1, BEZ_DTYPE *y3_out1);
 
 /*
- * function: bezSplitCurve3D
+ * function: bez3SplitCurve
  * 
  * Splits the Bezier curve into two sub-curves at the given t.
  * 
@@ -188,19 +194,19 @@ void bezSplitCurve2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
  *   x2_out1, y2_out1, z2_out1: output for the second control point of the second sub-curve
  *   x3_out1, y3_out1, z3_out1: output for the second anchor point of the second sub-curve
  */
-void bezSplitCurve3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
-                     BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
-                     BEZ_DTYPE x2, BEZ_DTYPE y2, BEZ_DTYPE z2,
-                     BEZ_DTYPE x3, BEZ_DTYPE y3, BEZ_DTYPE z3,
-                     BEZ_DTYPE t,
-                     BEZ_DTYPE *x0_out0, BEZ_DTYPE *y0_out0, BEZ_DTYPE *z0_out0,
-                     BEZ_DTYPE *x1_out0, BEZ_DTYPE *y1_out0, BEZ_DTYPE *z1_out0,
-                     BEZ_DTYPE *x2_out0, BEZ_DTYPE *y2_out0, BEZ_DTYPE *z2_out0,
-                     BEZ_DTYPE *x3_out0, BEZ_DTYPE *y3_out0, BEZ_DTYPE *z3_out0,
-                     BEZ_DTYPE *x0_out1, BEZ_DTYPE *y0_out1, BEZ_DTYPE *z0_out1,
-                     BEZ_DTYPE *x1_out1, BEZ_DTYPE *y1_out1, BEZ_DTYPE *z1_out1,
-                     BEZ_DTYPE *x2_out1, BEZ_DTYPE *y2_out1, BEZ_DTYPE *z2_out1,
-                     BEZ_DTYPE *x3_out1, BEZ_DTYPE *y3_out1, BEZ_DTYPE *z3_out1);
+void bez3SplitCurve(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
+                    BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
+                    BEZ_DTYPE x2, BEZ_DTYPE y2, BEZ_DTYPE z2,
+                    BEZ_DTYPE x3, BEZ_DTYPE y3, BEZ_DTYPE z3,
+                    BEZ_DTYPE t,
+                    BEZ_DTYPE *x0_out0, BEZ_DTYPE *y0_out0, BEZ_DTYPE *z0_out0,
+                    BEZ_DTYPE *x1_out0, BEZ_DTYPE *y1_out0, BEZ_DTYPE *z1_out0,
+                    BEZ_DTYPE *x2_out0, BEZ_DTYPE *y2_out0, BEZ_DTYPE *z2_out0,
+                    BEZ_DTYPE *x3_out0, BEZ_DTYPE *y3_out0, BEZ_DTYPE *z3_out0,
+                    BEZ_DTYPE *x0_out1, BEZ_DTYPE *y0_out1, BEZ_DTYPE *z0_out1,
+                    BEZ_DTYPE *x1_out1, BEZ_DTYPE *y1_out1, BEZ_DTYPE *z1_out1,
+                    BEZ_DTYPE *x2_out1, BEZ_DTYPE *y2_out1, BEZ_DTYPE *z2_out1,
+                    BEZ_DTYPE *x3_out1, BEZ_DTYPE *y3_out1, BEZ_DTYPE *z3_out1);
 
 
 //*****************************************************************************
@@ -208,7 +214,7 @@ void bezSplitCurve3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
 //*****************************************************************************
 
 /*
- * function: bezDerivative2D
+ * function: bez2Derivative
  * 
  * Calculates the derivative of a cubic Bezier curve and returns the result as
  * the points of a quadratic Bezier curve.
@@ -222,16 +228,16 @@ void bezSplitCurve3D(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
  *   x1_out, y1_out: references for the control point of the derivative
  *   x2_out, y2_out: references for the second anchor point of the derivative
  */
-void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                     BEZ_DTYPE x1, BEZ_DTYPE y1,
-                     BEZ_DTYPE x2, BEZ_DTYPE y2,
-                     BEZ_DTYPE x3, BEZ_DTYPE y3,
-                     BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out,
-                     BEZ_DTYPE *x1_out, BEZ_DTYPE *y1_out,
-                     BEZ_DTYPE *x2_out, BEZ_DTYPE *y2_out);
+void bez2Derivative(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                    BEZ_DTYPE x1, BEZ_DTYPE y1,
+                    BEZ_DTYPE x2, BEZ_DTYPE y2,
+                    BEZ_DTYPE x3, BEZ_DTYPE y3,
+                    BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out,
+                    BEZ_DTYPE *x1_out, BEZ_DTYPE *y1_out,
+                    BEZ_DTYPE *x2_out, BEZ_DTYPE *y2_out);
 
 /*
- * function: bezDerivative2D
+ * function: bez2DerivativeQuadratic
  * 
  * Calculates the derivative of a quadratic Bezier curve and returns the result
  * as the points of a linear Bezier curve.
@@ -243,14 +249,14 @@ void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
  *   x0_out, y0_out: references for the first anchor point of the derivative
  *   x1_out, y1_out: references for the second anchor point of the derivative
  */
-void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                     BEZ_DTYPE x1, BEZ_DTYPE y1,
-                     BEZ_DTYPE x2, BEZ_DTYPE y2,
-                     BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out,
-                     BEZ_DTYPE *x1_out, BEZ_DTYPE *y1_out);
+void bez2DerivativeQuadratic(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                             BEZ_DTYPE x1, BEZ_DTYPE y1,
+                             BEZ_DTYPE x2, BEZ_DTYPE y2,
+                             BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out,
+                             BEZ_DTYPE *x1_out, BEZ_DTYPE *y1_out);
 
 /*
- * function: bezDerivative2D
+ * function: bez2DerivativeLinear
  * 
  * Calculates the derivative of a linear Bezier curve.
  * 
@@ -260,9 +266,9 @@ void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
  *   x2, y2: coordinates of second anchor point
  *   x0_out, y0_out: references for the derivative
  */
-void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                     BEZ_DTYPE x1, BEZ_DTYPE y1,
-                     BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out);
+void bez2DerivativeLinear(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                          BEZ_DTYPE x1, BEZ_DTYPE y1,
+                          BEZ_DTYPE *x0_out, BEZ_DTYPE *y0_out);
 
 
 //*****************************************************************************
@@ -270,7 +276,7 @@ void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
 //*****************************************************************************
 
 /*
- * function: bezBoundingBox2D
+ * function: bez2BoundingBox
  *
  * Computes the coordinates of an axis-aligned bounding box.
  * 
@@ -282,11 +288,17 @@ void bezDerivative2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
  *   x_min, y_min: references to the lower left corner of the box (output)
  *   x_max, y_max: references to the upper right corner of the box (output)
  */
-void bezBoundingBox2D(BEZ_DTYPE x0, BEZ_DTYPE y0,
-                      BEZ_DTYPE x1, BEZ_DTYPE y1,
-                      BEZ_DTYPE x2, BEZ_DTYPE y2,
-                      BEZ_DTYPE x3, BEZ_DTYPE y3,
-                      BEZ_DTYPE* x_min, BEZ_DTYPE* y_min,
-                      BEZ_DTYPE* x_max, BEZ_DTYPE* y_max);
+void bez2BoundingBox(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                     BEZ_DTYPE x1, BEZ_DTYPE y1,
+                     BEZ_DTYPE x2, BEZ_DTYPE y2,
+                     BEZ_DTYPE x3, BEZ_DTYPE y3,
+                     BEZ_DTYPE* x_min, BEZ_DTYPE* y_min,
+                     BEZ_DTYPE* x_max, BEZ_DTYPE* y_max);
+
+
+// Finish extern "C"
+#ifdef __cplusplus
+}
+#endif
 
 #endif
