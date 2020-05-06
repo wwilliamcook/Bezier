@@ -11,6 +11,7 @@
 #define CONTROL_RADIUS 0.031
 #define MATH_TAU 6.283185307179586
 #define STEP_SIZE .01
+#define FLATNESS_THRESHOLD 1.001
 
 float control_points[4][2] = {
     {-0.63, -0.675},
@@ -115,6 +116,12 @@ int main(int argc, char* argv[])
                    control_points[1][0], control_points[1][1],
                    control_points[2][0], control_points[2][1],
                    control_points[3][0], control_points[3][1]);
+
+        printf("arc length: %8.3f\n", bez2ArcLength(control_points[0][0], control_points[0][1],
+                                                    control_points[1][0], control_points[1][1],
+                                                    control_points[2][0], control_points[2][1],
+                                                    control_points[3][0], control_points[3][1],
+                                                    FLATNESS_THRESHOLD));
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

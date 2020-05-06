@@ -480,11 +480,7 @@ void bez2BoundingBox(BEZ_DTYPE x0, BEZ_DTYPE y0,
     disc = b * b - 4. * a * c;
 
     if (disc > 0.) {
-#if BEZ_DTYPE_FLOAT
-        sqrtdisc = sqrtf(disc);
-#else
-        sqrtdisc = sqrt(disc);
-#endif
+        sqrtdisc = BEZ_SQRT_FUNC(disc);
 
         temp1 = 1. / (2. * a);
         temp2 = -b;
@@ -569,11 +565,7 @@ void bez2BoundingBox(BEZ_DTYPE x0, BEZ_DTYPE y0,
     disc = b * b - 4. * a * c;
 
     if (disc > 0.) {
-#if BEZ_DTYPE_FLOAT
-        sqrtdisc = sqrtf(disc);
-#else
-        sqrtdisc = sqrt(disc);
-#endif
+        sqrtdisc = BEZ_SQRT_FUNC(disc);
 
         temp1 = 1. / (2. * a);
         temp2 = -b;
@@ -639,5 +631,192 @@ void bez2BoundingBox(BEZ_DTYPE x0, BEZ_DTYPE y0,
         break;
     case 0:
         break;
+    }
+}
+
+
+//*****************************************************************************
+//* FLATNESS
+//*****************************************************************************
+
+/*
+ * function: bez2IsFlat
+ * 
+ * Returns BEZ_TRUE if the curve is approximately flat, BEZ_FALSE otherwise.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second control point
+ *   x3, y3: coordinates of second anchor point
+ *   flatness_threshold: max ratio of hull perimeter to anchor distance for flat
+ */
+BEZ_DTYPE bez2IsFlat(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                     BEZ_DTYPE x1, BEZ_DTYPE y1,
+                     BEZ_DTYPE x2, BEZ_DTYPE y2,
+                     BEZ_DTYPE x3, BEZ_DTYPE y3,
+                     BEZ_DTYPE flatness_threshold) {
+    BEZ_DTYPE hull_perimeter;
+    BEZ_DTYPE anchor_distance;
+    BEZ_DTYPE temp1, temp2;
+
+    temp1 = x0 - x1;
+    temp2 = y0 - y1;
+    hull_perimeter = BEZ_SQRT_FUNC(temp1 * temp1 + temp2 * temp2);
+
+    temp1 = x1 - x2;
+    temp2 = y1 - y2;
+    hull_perimeter += BEZ_SQRT_FUNC(temp1 * temp1 + temp2 * temp2);
+
+    temp1 = x2 - x3;
+    temp2 = y2 - y3;
+    hull_perimeter += BEZ_SQRT_FUNC(temp1 * temp1 + temp2 * temp2);
+
+    temp1 = x0 - x3;
+    temp2 = y0 - y3;
+    anchor_distance = BEZ_SQRT_FUNC(temp1 * temp1 + temp2 * temp2);
+
+    if (hull_perimeter <= flatness_threshold * anchor_distance) {
+        return BEZ_TRUE;
+    }
+    else {
+        return BEZ_FALSE;
+    }
+}
+
+
+//*****************************************************************************
+//* ARC LENGTH
+//*****************************************************************************
+
+/*
+ * function: bez2ArcLength
+ * 
+ * Returns the approximate arc length of the cubic Bezier curve.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second control point
+ *   x3, y3: coordinates of second anchor point
+ *   flatness_threshold: max ratio of hull perimeter to anchor distance for flat
+ */
+BEZ_DTYPE bez2ArcLength(BEZ_DTYPE x0, BEZ_DTYPE y0,
+                        BEZ_DTYPE x1, BEZ_DTYPE y1,
+                        BEZ_DTYPE x2, BEZ_DTYPE y2,
+                        BEZ_DTYPE x3, BEZ_DTYPE y3,
+                        BEZ_DTYPE flatness_threshold) {
+    {
+        BEZ_DTYPE hull_perimeter;
+        BEZ_DTYPE anchor_distance;
+        BEZ_DTYPE temp_x, temp_y;
+
+        temp_x = x0 - x1;
+        temp_y = y0 - y1;
+        hull_perimeter = BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y);
+
+        temp_x = x1 - x2;
+        temp_y = y1 - y2;
+        hull_perimeter += BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y);
+
+        temp_x = x2 - x3;
+        temp_y = y2 - y3;
+        hull_perimeter += BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y);
+
+        temp_x = x0 - x3;
+        temp_y = y0 - y3;
+        anchor_distance = BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y);
+
+        if (hull_perimeter <= flatness_threshold * anchor_distance) {
+            return (hull_perimeter + anchor_distance) * .5;
+        }
+    }
+
+    BEZ_DTYPE a0, b0, a1, b1, a2, b2, a3, b3, d0, e0, d1, e1, d2, e2, d3, e3;
+    bez2SplitCurve(x0, y0,
+                   x1, y1,
+                   x2, y2,
+                   x3, y3,
+                   0.5,
+                   &a0, &b0,
+                   &a1, &b1,
+                   &a2, &b2,
+                   &a3, &b3,
+                   &d0, &e0,
+                   &d1, &e1,
+                   &d2, &e2,
+                   &d3, &e3);
+    return bez2ArcLength(a0, b0, a1, b1, a2, b2, a3, b3, flatness_threshold) +
+        bez2ArcLength(d0, e0, d1, e1, d2, e2, d3, e3, flatness_threshold);
+}
+
+/*
+ * function: bez3ArcLength
+ * 
+ * Returns the approximate arc length of the cubic Bezier curve.
+ * 
+ * Args:
+ *   x0, y0: coordinates of first anchor point
+ *   x1, y1: coordinates of first control point
+ *   x2, y2: coordinates of second control point
+ *   x3, y3: coordinates of second anchor point
+ *   flatness_threshold: max ratio of hull perimeter to anchor distance for flat
+ */
+BEZ_DTYPE bez3ArcLength(BEZ_DTYPE x0, BEZ_DTYPE y0, BEZ_DTYPE z0,
+                        BEZ_DTYPE x1, BEZ_DTYPE y1, BEZ_DTYPE z1,
+                        BEZ_DTYPE x2, BEZ_DTYPE y2, BEZ_DTYPE z2,
+                        BEZ_DTYPE x3, BEZ_DTYPE y3, BEZ_DTYPE z3,
+                        BEZ_DTYPE flatness_threshold) {
+    BEZ_DTYPE hull_perimeter;
+    BEZ_DTYPE anchor_distance;
+    BEZ_DTYPE temp_x, temp_y, temp_z;
+
+    temp_x = x0 - x1;
+    temp_y = y0 - y1;
+    temp_z = z0 - z1;
+    hull_perimeter = BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y + temp_z * temp_z);
+
+    temp_x = x1 - x2;
+    temp_y = y1 - y2;
+    temp_z = z1 - z2;
+    hull_perimeter += BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y + temp_z * temp_z);
+
+    temp_x = x2 - x3;
+    temp_y = y2 - y3;
+    temp_z = z2 - z3;
+    hull_perimeter += BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y + temp_z * temp_z);
+
+    temp_x = x0 - x3;
+    temp_y = y0 - y3;
+    temp_z = z0 - z3;
+    anchor_distance = BEZ_SQRT_FUNC(temp_x * temp_x + temp_y * temp_y + temp_z * temp_z);
+
+    if (hull_perimeter <= flatness_threshold * anchor_distance) {
+        return (hull_perimeter + anchor_distance) * .5;
+    }
+    else {
+        BEZ_DTYPE a0, b0, c0,
+                  a1, b1, c1,
+                  a2, b2, c2,
+                  a3, b3, c3,
+                  d0, e0, f0,
+                  d1, e1, f1,
+                  d2, e2, f2,
+                  d3, e3, f3;
+        bez3SplitCurve(x0, y0, z0,
+                       x1, y1, z1,
+                       x2, y2, z2,
+                       x3, y3, z3,
+                       0.5,
+                       &a0, &b0, &c0,
+                       &a1, &b1, &c1,
+                       &a2, &b2, &c2,
+                       &a3, &b3, &c3,
+                       &d0, &e0, &f0,
+                       &d1, &e1, &f1,
+                       &d2, &e2, &f2,
+                       &d3, &e3, &f3);
+        return bez3ArcLength(a0, b0, c0, a1, b1, c1, a2, b2, c2, a3, b3, c3, flatness_threshold) +
+            bez3ArcLength(d0, e0, f0, d1, e1, f1, d2, e2, f2, d3, e3, f3, flatness_threshold);
     }
 }
