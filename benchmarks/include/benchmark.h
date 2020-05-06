@@ -44,7 +44,7 @@ void printAndLog(FILE* log_file, BOOL log, char* format, ...);
                      code_to_time) {\
     struct timespec start, end;\
     double multiplier;\
-    int i;\
+    size_t i;\
     num_times = 1;\
     while (TRUE) {\
         timespec_get(&start, TIME_UTC);\
