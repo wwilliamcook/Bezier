@@ -110,9 +110,8 @@ int main(int argc, char* argv[]) {
     printAndLog(log_file, log, "microseconds per operation:    %f\n",
         duration * 1e6 / (double)(num_executions));
 
-    printAndLog(log_file, log, "\n\nThis concludes the benchmarks for float.\n");
 
-
+    printAndLog(log_file, log, "\n\n");
     printAndLog(log_file, log, "********************************************************************************\n");
     printAndLog(log_file, log, "Beginning benchmarks for data type double.\n");
     printAndLog(log_file, log, "********************************************************************************\n");
@@ -181,9 +180,8 @@ int main(int argc, char* argv[]) {
     printAndLog(log_file, log, "microseconds per operation:    %f\n",
         duration * 1e6 / (double)(num_executions));
 
-    printAndLog(log_file, log, "\n\nThis concludes the benchmarks for double.\n");
 
-
+    printAndLog(log_file, log, "\n\n");
     printAndLog(log_file, log, "********************************************************************************\n");
     printAndLog(log_file, log, "Beginning benchmarks for data type long double.\n");
     printAndLog(log_file, log, "********************************************************************************\n");
@@ -252,7 +250,10 @@ int main(int argc, char* argv[]) {
     printAndLog(log_file, log, "microseconds per operation:    %f\n",
         duration * 1e6 / (double)(num_executions));
 
-    printAndLog(log_file, log, "\n\nThis concludes the benchmarks for long double.\n");
+    printAndLog(log_file, log, "\n\n");
+    printAndLog(log_file, log, "********************************************************************************\n");
+    printAndLog(log_file, log, "This concludes the floating point operation benchmarks.\n");
+    printAndLog(log_file, log, "********************************************************************************\n");
 
     fclose(log_file);
 
