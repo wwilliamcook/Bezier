@@ -62,5 +62,9 @@ target_link_libraries(Example-FiveAnchorVisualization
 ###############################################################################
 
 add_executable(benchmark-bezier_library benchmarks/bezier_benchmark.c)
-target_include_directories(benchmark-bezier_library PRIVATE include)
+target_include_directories(benchmark-bezier_library PRIVATE include benchmarks/include)
 target_link_libraries(benchmark-bezier_library Bezier)
+
+add_executable(benchmark-float benchmarks/float_benchmark.c)
+target_include_directories(benchmark-float PRIVATE benchmarks/include)
+
